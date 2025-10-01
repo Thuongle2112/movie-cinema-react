@@ -76,10 +76,37 @@ export const en = {
   trailer: "Trailer",
   watchTrailer: "Watch Trailer",
   noTrailerAvailable: "No trailer available",
+  cast: 'Cast',
+  officialVideos: 'Official Videos',
+  similarMovies: 'Similar Movies',
+  similarTVShows: 'Similar TV Shows',
+  recommendations: 'Recommendations',
+  viewAll: 'View All',
+  noVideosAvailable: 'No official videos available',
+  noCastAvailable: 'Cast information not available',
+  noSimilarContent: 'No similar content available',
+  noRecommendations: 'No recommendations available',
+  video: "Video",
+  videos: "Videos",
 
   // MovieCard
   addedToFavorites: "Added to favorites",
   removedFromFavorites: "Removed from favorites",
+
+  //Search
+  all: 'All',
+  people: 'People',
+  collections: 'Collections',
+  companies: 'Companies',
+  keywords: 'Keywords',
+  company: 'Company',
+  keyword: 'Keyword',
+  noResultsFound: 'No results found',
+  tryDifferentKeywords: 'Try using different keywords',
+  loadMore: 'Load More',
+  showing: 'Showing',
+  enterSearchTerm: 'Enter a search term to find movies, TV shows, people, and more',
+  startSearching: 'Start Searching',
 
 
   // Common

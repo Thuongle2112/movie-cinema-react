@@ -1,65 +1,56 @@
 import { useParams, Link, useLocation } from "react-router-dom";
-import { useState, useEffect, use } from "react";
-import YouTube from 'react-youtube';
-import { getMovieDetails, getMovieTrailer } from "../services/api";
+import { useEffect } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { formatDate } from "../utils/dateUtils";
 import MovieDetailSkeleton from "../components/MovieDetail/MovieDetailSkeleton";
+import TrailerModal from "../components/MovieDetail/TrailerModal";
+import HorizontalScrollSection from "../components/MovieDetail/HorizontalScrollSection";
+import CastCard from "../components/MovieDetail/CastCard";
+import MovieCard from "../components/Home/MovieCard";
+import VideoCard from "../components/MovieDetail/VideoCard";
+import { useMovieDetail } from "../hooks/useMovieDetail";
+import { useTrailerModal } from "../hooks/useTrailerModal";
+import { getOfficialVideos } from "../services/api";
+import { useState } from "react";
 
 function MovieDetail() {
     const { id } = useParams();
     const location = useLocation();
-    const [content, setContent] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [trailerKey, setTrailerKey] = useState(null);
-    const [showTrailer, setShowTrailer] = useState(false);
     const { t, getAPILanguage, language } = useLanguage();
+    const [officialVideos, setOfficialVideos] = useState([]);
 
     const contentType = location.pathname.startsWith('/tv') ? 'tv' : 'movie';
+    const apiLanguage = getAPILanguage();
 
+    // Custom hooks
+    const {
+        content,
+        trailerKey,
+        credits,
+        similarContent,
+        recommendations,
+        loading,
+        error
+    } = useMovieDetail(id, contentType, apiLanguage);
+
+    const [currentVideoKey, setCurrentVideoKey] = useState(null);
+    const [currentVideoTitle, setCurrentVideoTitle] = useState(null);
+    const { showTrailer, openTrailer, closeTrailer } = useTrailerModal();
+
+    // Fetch official videos
     useEffect(() => {
-        const fetchContent = async () => {
-            try {
-                setLoading(true);
-                const apiLanguage = getAPILanguage();
-                const [contentData, trailerData] = await Promise.all([
-                    getMovieDetails(id, apiLanguage, contentType),
-                    getMovieTrailer(id, contentType)
-                ]);
-
-                setContent(contentData);
-                setTrailerKey(trailerData?.key);
-            } catch (error) {
-                console.error(`Error fetching ${contentType} details:`, error);
-            } finally {
-                setLoading(false);
+        const fetchOfficialVideos = async () => {
+            if (id) {
+                const videos = await getOfficialVideos(id, contentType);
+                setOfficialVideos(videos);
             }
         };
-
-        fetchContent();
-    }, [id, language, getAPILanguage, contentType]);
+        fetchOfficialVideos();
+    }, [id, contentType]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [id, language, getAPILanguage, contentType]);
-
-    useEffect(() => {
-        const handleKeyDown = (event) => {
-            if (event.key === 'Escape' && showTrailer) {
-                setShowTrailer(false);
-            }
-        };
-
-        if (showTrailer) {
-            document.addEventListener('keydown', handleKeyDown);
-            document.body.style.overflow = 'hidden';
-        }
-
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown);
-            document.body.style.overflow = 'unset';
-        };
-    }, [showTrailer]);
 
     const defaultBackground = 'https://images.unsplash.com/photo-1489599809568-8c7f8d8c2b69?q=80&w=2070';
 
@@ -75,11 +66,23 @@ function MovieDetail() {
         return content?.release_date || content?.first_air_date;
     };
 
+    const handleVideoPlay = (videoKey, videoTitle) => {
+        setCurrentVideoKey(videoKey);
+        setCurrentVideoTitle(videoTitle);
+        openTrailer();
+    };
+
+    const handleTrailerPlay = () => {
+        setCurrentVideoKey(trailerKey);
+        setCurrentVideoTitle(null);
+        openTrailer();
+    };
+
     if (loading) {
         return <MovieDetailSkeleton contentBackground={defaultBackground} />;
     }
 
-    if (!content) {
+    if (error || !content) {
         return (
             <div
                 className="min-h-screen w-full flex items-center justify-center"
@@ -130,8 +133,8 @@ function MovieDetail() {
             }}
         >
             <div className="w-full max-w-6xl mx-auto p-20">
-                {/* Content card */}
-                <div className="md:flex">
+                {/* Main Content Section */}
+                <div className="md:flex mb-12">
                     <div className="md:w-1/3 rounded-lg overflow-hidden">
                         <div className="relative">
                             <img
@@ -179,7 +182,7 @@ function MovieDetail() {
                         {trailerKey && (
                             <div className="mb-6">
                                 <button
-                                    onClick={() => setShowTrailer(true)}
+                                    onClick={handleTrailerPlay}
                                     className="inline-flex items-center px-6 py-3 bg-red-600 text-white font-semi rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl"
                                 >
                                     <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -187,69 +190,6 @@ function MovieDetail() {
                                     </svg>
                                     {t('watchTrailer')}
                                 </button>
-                            </div>
-                        )}
-
-                        {/* ✅ Trailer Modal Dialog */}
-                        {showTrailer && trailerKey && (
-                            <div className="fixed inset-0 backdrop-blur-md flex items-center justify-center z-50 p-2 sm:p-4"
-                                style={{
-                                    background: 'linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%)'
-                                }}>
-                                {/* Modal Backdrop - Click to close */}
-                                <div
-                                    className="absolute inset-0"
-                                    onClick={() => setShowTrailer(false)}
-                                ></div>
-
-                                {/* Modal Content */}
-                                <div className="relative bg-black rounded-lg overflow-hidden shadow-2xl max-w-4xl w-full max-h-[90vh] animate-fade-in">
-                                    {/* Modal Header */}
-                                    <div className="flex justify-between items-center p-4 bg-gray-900 border-b border-gray-700">
-                                        <div className="flex items-center space-x-3">
-                                            <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
-                                                <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <h3 className="text-white font-semibold text-lg">{getTitle()}</h3>
-                                                <p className="text-gray-400 text-sm">{t('trailer')}</p>
-                                            </div>
-                                        </div>
-
-                                        {/* Close Button */}
-                                        <button
-                                            onClick={() => setShowTrailer(false)}
-                                            className="text-gray-400 hover:text-white transition-colors duration-200 p-2 hover:bg-gray-800 rounded-full"
-                                        >
-                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
-                                    </div>
-
-                                    {/* Video Player */}
-                                    <div className="relative">
-                                        <YouTube
-                                            videoId={trailerKey}
-                                            opts={{
-                                                height: '500',
-                                                width: '100%',
-                                                playerVars: {
-                                                    autoplay: 1,
-                                                    modestbranding: 1,
-                                                    rel: 0,
-                                                    iv_load_policy: 3
-                                                }
-                                            }}
-                                            onReady={(event) => {
-                                                // Optional: Auto focus on player
-                                                event.target.playVideo();
-                                            }}
-                                        />
-                                    </div>
-                                </div>
                             </div>
                         )}
 
@@ -323,7 +263,71 @@ function MovieDetail() {
                         </div>
                     </div>
                 </div>
+
+                {/* Cast Section */}
+                <HorizontalScrollSection
+                    title={t('cast')}
+                    items={credits.cast?.slice(0, 20) || []}
+                    renderItem={(person) => <CastCard key={person.id} person={person} />}
+                />
+
+                {/* Official Videos Section */}
+                <HorizontalScrollSection
+                    title={t('officialVideos')}
+                    items={officialVideos}
+                    renderItem={(video) => (
+                        <VideoCard
+                            key={video.id}
+                            video={video}
+                            onPlay={(videoKey) => {
+                                setCurrentVideoKey(videoKey);
+                                // Optionally pass video name to modal
+                                setCurrentVideoTitle(video.name);
+                                openTrailer();
+                            }}
+                        />
+                    )}
+                />
+
+                {/* Similar Content Section */}
+                <HorizontalScrollSection
+                    title={contentType === 'tv' ? t('similarTVShows') : t('similarMovies')}
+                    items={(similarContent?.results || []).slice(0, 20)}
+                    renderItem={(item) => (
+                        <div key={item.id} className="flex-shrink-0 w-48">
+                            <MovieCard movie={item}
+                                contentType={contentType}
+                            />
+                        </div>
+                    )}
+                />
+
+                {/* Recommendations Section */}
+                <HorizontalScrollSection
+                    title={t('recommendations')}
+                    items={(recommendations?.results || []).slice(0, 20)}
+                    renderItem={(item) => (
+                        <div key={item.id} className="flex-shrink-0 w-48">
+                            <MovieCard movie={item}
+                                contentType={contentType}
+                            />
+                        </div>
+                    )}
+                />
             </div>
+
+            {/* Trailer Modal */}
+            <TrailerModal
+                isOpen={showTrailer}
+                onClose={() => {
+                    closeTrailer();
+                    setCurrentVideoKey(null);
+                    setCurrentVideoTitle(null);
+                }}
+                trailerKey={currentVideoKey}
+                title={getTitle()}
+                videoTitle={currentVideoTitle}
+            />
         </div>
     );
 }

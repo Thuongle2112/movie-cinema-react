@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLanguage } from "../../contexts/LanguageContext";
-import Logo from '../../assets/logo.png';
+import Logo from '../../assets/images/logo.png';
 
 function NavBar({ headerState }) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -59,31 +59,21 @@ function NavBar({ headerState }) {
 
     const mobileLinkClasses = `
         block px-3 py-2 text-base font-medium rounded-md transition-all duration-200
-        ${headerState.isScrolled
-            ? 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
-            : 'text-white/90 hover:text-white hover:bg-white/10'
-        }
+        text-white/90 hover:text-white hover:bg-white/10
     `;
 
     const mobileSubLinkClasses = `
         block px-6 py-2 text-sm font-medium rounded-md transition-all duration-200 ml-3
-        ${headerState.isScrolled
-            ? 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-            : 'text-white/70 hover:text-white/90 hover:bg-white/5'
-        }
+        text-white/70 hover:text-white/90 hover:bg-white/5
     `;
 
     const mobileMenuBackgroundClasses = `
-        py-3 space-y-1 
-        ${headerState.isScrolled ? 'bg-white' : 'bg-black/20 backdrop-blur-md'}
+        py-3 space-y-1 bg-black/20 backdrop-blur-md
     `;
 
     const mobileDropdownButtonClasses = `
         flex items-center justify-between w-full px-3 py-2 text-base font-medium rounded-md transition-all duration-200
-        ${headerState.isScrolled
-            ? 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
-            : 'text-white/90 hover:text-white hover:bg-white/10'
-        }
+        text-white/90 hover:text-white hover:bg-white/10
     `;
 
 
@@ -185,7 +175,7 @@ function NavBar({ headerState }) {
             <div className={`
                 md:hidden overflow-hidden transition-all duration-300 ease-in-out
                 ${isMobileMenuOpen
-                    ? 'max-h-96 opacity-100 border-t border-white/20'
+                    ? 'max-h opacity-100 rounded-b border-t border-white/20'
                     : 'max-h-0 opacity-0'
                 }
             `}>
@@ -271,7 +261,7 @@ function NavBar({ headerState }) {
                     </Link>
 
                     {/* Mobile Language Switcher */}
-                    <div className="border-t border-white/10 pt-3 mt-3">
+                    <div className="border-t border-white/10 pt-3 px-3 mt-3">
                         <button
                             onClick={() => {
                                 toggleLanguage();
@@ -279,11 +269,7 @@ function NavBar({ headerState }) {
                             }}
                             className={`
                                 flex items-center justify-center space-x-3 w-full px-3 py-3 
-                                rounded-md text-base font-medium border transition-all duration-200
-                                ${headerState.isScrolled
-                                    ? 'text-gray-700 hover:text-blue-600 hover:bg-blue-50 border-gray-300'
-                                    : 'text-white/90 hover:text-white hover:bg-white/10 border-white/30'
-                                }
+                                rounded-md text-base font-medium border transition-all duration-200 text-white/90 hover:text-white hover:bg-white/10 border-white/30
                             `}
                         >
                             <span className="text-xl">

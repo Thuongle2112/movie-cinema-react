@@ -76,11 +76,37 @@ export const vi = {
     trailer: "Trailer",
     watchTrailer: "Xem Trailer",
     noTrailerAvailable: "Không có trailer nào",
+    cast: 'Diễn viên',
+    officialVideos: 'Video chính thức',
+    similarMovies: 'Phim tương tự',
+    similarTVShows: 'Chương trình TV tương tự',
+    recommendations: 'Đề xuất',
+    viewAll: 'Xem tất cả',
+    noVideosAvailable: 'Không có video chính thức',
+    noCastAvailable: 'Không có thông tin diễn viên',
+    noSimilarContent: 'Không có nội dung tương tự',
+    noRecommendations: 'Không có đề xuất',
+    video: "Video",
+    videos: "Video",
 
     // MovieCard
     addedToFavorites: "Đã thêm vào yêu thích",
     removedFromFavorites: "Đã xóa khỏi yêu thích",
 
+    //Search
+    all: 'Tất cả',
+    people: 'Người',
+    collections: 'Bộ sưu tập',
+    companies: 'Công ty',
+    keywords: 'Từ khóa',
+    company: 'Công ty',
+    keyword: 'Từ khóa',
+    noResultsFound: 'Không tìm thấy kết quả',
+    tryDifferentKeywords: 'Thử sử dụng từ khóa khác',
+    loadMore: 'Tải thêm',
+    showing: 'Hiển thị',
+    enterSearchTerm: 'Nhập từ khóa để tìm phim, chương trình TV, người và nhiều hơn',
+    startSearching: 'Bắt đầu tìm kiếm',
 
     // Common
     language: "Ngôn Ngữ",
