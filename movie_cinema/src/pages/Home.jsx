@@ -3,6 +3,7 @@ import { useHomeData } from "../hooks/useHomeData";
 import SearchHeader from "../components/Home/SearchHeader";
 import HorizontalMovieScroll from "../components/Home/HorizontalMovieScroll";
 import SectionWithToggle from "../components/Home/SectionWithToggle";
+import AdSense from "../components/AdSense";
 
 function Home() {
     const { t, getAPILanguage, language } = useLanguage();
@@ -69,6 +70,17 @@ function Home() {
                     onOptionChange={setPopularContentType}
                     loading={false}
                 />
+
+                {/* AdSense Banner */}
+                <div className="my-8">
+                    <AdSense
+                        client="ca-pub-2029502431652074"
+                        slot="1234567890"
+                        format="auto"
+                        responsive={true}
+                        className="rounded-lg overflow-hidden"
+                    />
+                </div>
 
                 {/* Top Rated Section */}
                 <SectionWithToggle
