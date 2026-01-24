@@ -10,8 +10,8 @@ import PropTypes from 'prop-types';
  * @param {string} style
  */
 const AdSense = ({
-  client = import.meta.env.VITE_ADSENSE_CLIENT,
-  slot = import.meta.env.VITE_ADSENSE_SLOT,
+  client = 'ca-pub-2029502431652074',
+  slot = '',
   format = 'auto',
   responsive = true,
   style = { display: 'block' },
