@@ -22,7 +22,6 @@ export const vi = {
     //NavBar
     popular: "Phổ Biến",
     nowPlaying: "Đang Chiếu",
-    topRated: "Xếp Hạng Cao",
     upcoming: "Sắp Ra Mắt",
     airingToday: "Phát Sóng Hôm Nay",
     onTV: "Trên TV",
@@ -66,7 +65,6 @@ export const vi = {
     rating: "Đánh Giá",
     overview: "Tổng Quan",
     releaseYear: "Năm Phát Hành",
-    releaseDate: "Ngày Phát Hành",
     directedBy: "Đạo diễn",
     director: "Đạo Diễn",
     firstAirDate: "Ngày Phát Sóng",
@@ -104,9 +102,7 @@ export const vi = {
     noResultsFound: 'Không tìm thấy kết quả',
     tryDifferentKeywords: 'Thử sử dụng từ khóa khác',
     loadMore: 'Tải thêm',
-    showing: 'Hiển thị',
     enterSearchTerm: 'Nhập từ khóa để tìm phim, chương trình TV, người và nhiều hơn',
-    startSearching: 'Bắt đầu tìm kiếm',
 
     // Common
     language: "Ngôn Ngữ",

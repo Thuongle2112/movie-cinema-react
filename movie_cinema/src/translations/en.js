@@ -22,7 +22,6 @@ export const en = {
   //NavBar
   popular: "Popular",
   nowPlaying: "Now Playing",
-  topRated: "Top Rated",
   upcoming: "Upcoming",
   airingToday: "Airing Today",
   onTV: "On TV",
@@ -66,7 +65,6 @@ export const en = {
   rating: "Rating",
   overview: "Overview",
   releaseYear: "Release Year",
-  releaseDate: "Release Date",
   directedBy: "Directed by",
   director: "Director",
   firstAirDate: "First Air Date",
@@ -104,9 +102,7 @@ export const en = {
   noResultsFound: 'No results found',
   tryDifferentKeywords: 'Try using different keywords',
   loadMore: 'Load More',
-  showing: 'Showing',
   enterSearchTerm: 'Enter a search term to find movies, TV shows, people, and more',
-  startSearching: 'Start Searching',
 
 
   // Common
